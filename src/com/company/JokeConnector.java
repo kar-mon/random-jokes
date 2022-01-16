@@ -68,13 +68,13 @@ public class JokeConnector {
         // this is the same as: if(jokeObject.has("delivery")){joke.delivery=jokeObject.getString("delivery");} else {joke.delivery = null;}
         joke.id = jokeObject.getInt("id");
         joke.safe = jokeObject.getBoolean("safe");
-        joke.language = jokeObject.getString("language");
-        joke.nsfw = jokeObject.getBoolean("nsfw");
-        joke.religious = jokeObject.getBoolean("religious");
-        joke.political = jokeObject.getBoolean("political");
-        joke.racist = jokeObject.getBoolean("racist");
-        joke.sexist = jokeObject.getBoolean("sexist");
-        joke.explicit = jokeObject.getBoolean("explicit");
+        joke.language = jokeObject.getString("lang");
+        joke.nsfw = jokeObject.getJSONObject("flags").getBoolean("nsfw");
+        joke.religious = jokeObject.getJSONObject("flags").getBoolean("religious");
+        joke.political = jokeObject.getJSONObject("flags").getBoolean("political");
+        joke.racist = jokeObject.getJSONObject("flags").getBoolean("racist");
+        joke.sexist = jokeObject.getJSONObject("flags").getBoolean("sexist");
+        joke.explicit = jokeObject.getJSONObject("flags").getBoolean("explicit");
 
         return joke;
 
