@@ -11,12 +11,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
+    /* public static void main(String[] args) {
         JokeConnector connector = new JokeConnector();
         Scanner scan = new Scanner(System.in);
 
@@ -58,6 +56,40 @@ public class Main {
             } while (!JokeCategory.equals("exit"));
         }
     }
+} */
+
+
+    public static void main(String[] args) {
+        JokeConnector connector = new JokeConnector();
+        Scanner scanner = new Scanner(System.in);
+
+        List<Joke> jokes = new ArrayList<>();
+
+        System.out.println("How many jokes do you want to download?");
+        int size = scanner.nextInt();
+
+        for (int i = 0; i < size; i++) {
+            try {
+                jokes.add(connector.getJoke("Any"));
+            } catch (Exception e) {
+                System.out.println("Sorry, we have a problem");
+                e.printStackTrace();
+            }
+        }
+        System.out.println("You downloaded " + jokes.size() + " jokes");
+
+
+        SortJokeListByLength(jokes);
+        //System.out.println(jokes);
+        System.out.println(jokes.get(0));
+    }
+
+
+    private static void SortJokeListByLength(List<Joke> jokes) {
+        Comparator<Joke> jokeComparator
+                = Comparator.comparing(Joke::getJokeLength);
+
+        Collections.sort(jokes, jokeComparator);
+
+    }
 }
-
-

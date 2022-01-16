@@ -16,6 +16,12 @@ public class Joke {
     public Boolean sexist;
     public Boolean explicit;
 
+    public Integer getJokeLength() {
+        if (this.joke != null){
+            return this.joke.length();}
+        else{return this.setup.length()+delivery.length();}
+    }
+
     public String toString(){
         if (this.joke != null){
             return this.joke;}
