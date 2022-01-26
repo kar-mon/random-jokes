@@ -2,7 +2,6 @@ package com.company;
 
 import netscape.javascript.JSException;
 import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
@@ -22,17 +21,61 @@ public class Main {
 - print all downloaded religious jokes
 - count all two-part jokes
 - delete downloaded jokes
-todo    - download more jokes and add it to existing list*/
+- download more jokes and add it to existing list*/
 
     public static void main(String[] args) {
+
+        List<Joke> jokes = new ArrayList<>();
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("How many jokes do you want to download?");
+            int size = Integer.parseInt(scanner.nextLine());
+            jokes.addAll(downloadJokes(size));
+            System.out.println("You now have " + jokes.size() + " jokes at your list");
+
+            SortJokeListByLength(jokes);
+            System.out.println("Shortest joke is: ");
+            System.out.println(jokes.get(0));
+
+            var religiousJokes = getReligiousJokes(jokes);
+            if (religiousJokes.size() != 0) {
+                String relig;
+                System.out.println("Do you want to see downloaded religious jokes? yes / no");
+                relig = scanner.nextLine();
+                if (relig.equals("yes")) {
+                    System.out.println("Downloaded religious jokes: ");
+                    System.out.println(religiousJokes);
+                }
+            }
+
+            System.out.println("Do you want to see how many two part jokes were downloaded? yes / no");
+            String twoPart;
+            twoPart = scanner.nextLine();
+            if (twoPart.equals("yes")) {
+                var twoPartJokesCounter = countTwoPartJokes(jokes);
+                System.out.println("You downloaded " + twoPartJokesCounter + "two part jokes");
+                System.out.println(jokes);
+            }
+
+            String delete;
+            System.out.println("Do you want to delete downloaded jokes? yes / no");
+            delete = scanner.nextLine();
+            if (delete.equals("yes")) {
+                // remove all elements using clear() method
+                jokes.clear();
+            }
+            System.out.println("Do you want to download more jokes? yes / no");
+            String downloadMore = scanner.nextLine();
+            if (!downloadMore.equals("yes")) {
+                break;
+            }
+        }
+    }
+
+    private static List<Joke> downloadJokes(int size) {
         JokeConnector connector = new JokeConnector();
-        Scanner scanner = new Scanner(System.in);
         //creating a list of jokes
         List<Joke> jokes = new ArrayList<>();
-
-        System.out.println("How many jokes do you want to download?");
-        int size = Integer.parseInt(scanner.nextLine());
-
         for (int i = 0; i < size; i++) {
             try {
                 jokes.add(connector.getJoke("Any"));
@@ -41,52 +84,7 @@ todo    - download more jokes and add it to existing list*/
                 e.printStackTrace();
             }
         }
-        System.out.println("You downloaded " + jokes.size() + " jokes");
-
-        SortJokeListByLength(jokes);
-        //System.out.println(jokes);
-        System.out.println("Shortest downloaded joke is: ");
-        System.out.println(jokes.get(0));
-
-        String relig;
-        List<Joke> religiousJokes = new ArrayList<>();
-        for (var joke : jokes) {
-            if (joke.religious) {
-                religiousJokes.add(joke);
-            }
-        }
-        if (religiousJokes.size() != 0) {
-            System.out.println("Do you want to see downloaded religious jokes? yes / no");
-            relig = scanner.nextLine();
-            if (relig.equals("yes")) {
-                System.out.println("Downloaded religious jokes: ");
-                System.out.println(religiousJokes);
-            }
-        }
-
-
-        String twoPart;
-        System.out.println("Do you want to see how many two part jokes were downloaded? yes/no");
-        twoPart = scanner.nextLine();
-        if (twoPart.equals("yes")) {
-            int twoPartJokesCounter = 0;
-            for (var joke : jokes) {
-                if (joke.setup != null) {
-                    twoPartJokesCounter++;
-                }
-            }
-            System.out.println("You downloaded " + twoPartJokesCounter + "two part jokes");
-            System.out.println(jokes);
-
-        }
-
-        String delete;
-        System.out.println("Do you want to delete downloaded jokes? yes/no");
-        delete = scanner.nextLine();
-        if (delete.equals("yes")) {
-            // remove all elements using clear() method
-            jokes.clear();
-        }
+        return jokes;
     }
 
 
@@ -96,5 +94,25 @@ todo    - download more jokes and add it to existing list*/
 
         Collections.sort(jokes, jokeComparator);
 
+    }
+
+    private static List<Joke> getReligiousJokes(List<Joke> jokes) {
+        List<Joke> religiousJokes = new ArrayList<>();
+        for (var joke : jokes) {
+            if (joke.religious) {
+                religiousJokes.add(joke);
+            }
+        }
+        return religiousJokes;
+    }
+
+    private static int countTwoPartJokes(List<Joke> jokes) {
+        int twoPartJokesCounter = 0;
+        for (var joke : jokes) {
+            if (joke.setup != null) {
+                twoPartJokesCounter++;
+            }
+        }
+        return twoPartJokesCounter;
     }
 }
