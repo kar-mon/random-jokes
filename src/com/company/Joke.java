@@ -17,15 +17,19 @@ public class Joke {
     public Boolean explicit;
 
     public Integer getJokeLength() { //for sorting by length
-        if (this.joke != null){
-            return this.joke.length();}
-        else{return this.setup.length()+delivery.length();}
+        if (this.joke != null) {
+            return this.joke.length();
+        } else {
+            return this.setup.length() + delivery.length();
+        }
     }
 
-    public String toString(){
-        if (this.joke != null){
-            return this.joke;}
-        else{return this.setup+" "+delivery;}
+    public String toString() {
+        if (this.joke != null) {
+            return this.joke;
+        } else {
+            return this.setup + " " + delivery;
+        }
     }
 
 }
