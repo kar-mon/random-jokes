@@ -46,7 +46,7 @@ public class JokeConnector {
         if (type.equals("twopart")) {
             String setup = currencyObject.getString("setup");
             String delivery = currencyObject.getString("delivery");
-            return setup +" "+ delivery;
+            return setup + " " + delivery;
 
         } else {
             String joke = currencyObject.getString("joke");
