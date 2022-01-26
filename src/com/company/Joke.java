@@ -16,7 +16,7 @@ public class Joke {
     public Boolean sexist;
     public Boolean explicit;
 
-    public Integer getJokeLength() {
+    public Integer getJokeLength() { //for sorting by length
         if (this.joke != null){
             return this.joke.length();}
         else{return this.setup.length()+delivery.length();}
