@@ -2,10 +2,9 @@ package com.company;
 
 import netscape.javascript.JSException;
 import org.json.JSONException;
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import javax.swing.*;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -26,6 +25,7 @@ public class Main {
     public static void main(String[] args) {
 
         List<Joke> jokes = new ArrayList<>();
+
         while (true) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("How many jokes do you want to download?");
@@ -36,6 +36,12 @@ public class Main {
             SortJokeListByLength(jokes);
             System.out.println("Shortest joke is: ");
             System.out.println(jokes.get(0));
+
+            System.out.println("Would you like to save downloaded jokes to a file? yes / no");
+            String save = scanner.nextLine();
+            if (save.equals("yes")) {
+                saveJokesToFile(jokes);
+            }
 
             var religiousJokes = getReligiousJokes(jokes);
             if (religiousJokes.size() != 0) {
@@ -58,7 +64,7 @@ public class Main {
             }
 
             String delete;
-            System.out.println("Do you want to delete downloaded jokes? yes / no");
+            System.out.println("Do you want to delete downloaded jokes from a list? yes / no");
             delete = scanner.nextLine();
             if (delete.equals("yes")) {
                 // remove all elements using clear() method
@@ -87,13 +93,24 @@ public class Main {
         return jokes;
     }
 
-
     private static void SortJokeListByLength(List<Joke> jokes) {
-        Comparator<Joke> jokeComparator
-                = Comparator.comparing(Joke::getJokeLength);
-
+        Comparator<Joke> jokeComparator = Comparator.comparing(Joke::getJokeLength);
         Collections.sort(jokes, jokeComparator);
+    }
 
+    private static void saveJokesToFile(List<Joke> jokes) {
+        try {
+            FileWriter fw = new FileWriter("jokes.ser");
+            Writer output = new BufferedWriter(fw);
+            int numEntries = jokes.size();
+            for (int i = 0; i < numEntries; i++) {
+                output.write(jokes.get(i).toString() + "\n");
+            }
+            output.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "File cannot be created");
+        }
+        System.out.println("Successfully saved downloaded jokes");
     }
 
     private static List<Joke> getReligiousJokes(List<Joke> jokes) {
